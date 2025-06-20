@@ -59,7 +59,7 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            .navigationTitle("最近再生した曲")
+            .navigationTitle("Elements of Feeling")
             .task {
                 await fetchRecentlyPlayedMusic()
             }

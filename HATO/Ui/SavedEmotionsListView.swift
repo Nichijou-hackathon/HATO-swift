@@ -28,7 +28,7 @@ struct SavedEmotionListsView: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("感情の履歴")
+            .navigationTitle("HeArt Works")
         }
     }
 }
