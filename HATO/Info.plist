@@ -8,5 +8,10 @@
 	</array>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Apple Musicの再生履歴にアクセスするために使用します</string>
+
+	<key>UIAppFonts</key>
+	<array>
+		<string>berlin-sans-fb-demi-bold.ttf</string>
+		</array>
 </dict>
 </plist>
