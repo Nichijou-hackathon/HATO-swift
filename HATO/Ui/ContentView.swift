@@ -65,8 +65,12 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showEmotionView) {
-            if let emotion = latestSongEmotion {
-                EmotionalArtView(emotionResponse: emotion)
+            if let emotion = latestSongEmotion, let song = recentSongs.first {
+                EmotionalArtView(
+                    emotionResponse: emotion,
+                    sourceTitle: song.title,
+                    sourceArtist: song.artistName
+                )
             }
         }
     }
