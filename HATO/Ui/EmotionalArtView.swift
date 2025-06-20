@@ -11,10 +11,12 @@ import SwiftUI
 import SceneKit
 
 struct EmotionalArtView: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    
     let emotionResponse: EmotionResponse
     
     @State private var scene: SCNScene?
-    
     @State private var isLoading = true
     @State private var showModel = false
     
@@ -30,14 +32,25 @@ struct EmotionalArtView: View {
                     if isLoading {
                         ProgressView("モデルを準備中...")
                     } else if let scene = scene {
-                        
-                        SceneView(
-                            scene: scene,
-                            options: [
-                                .autoenablesDefaultLighting,
-                                .allowsCameraControl
-                            ]
-                        )
+                        ZStack(alignment: .topTrailing){
+                            
+                            SceneView(
+                                scene: scene,
+                                options: [
+                                    .autoenablesDefaultLighting,
+                                    .allowsCameraControl
+                                ]
+                            )
+                            Button(action: {
+                                dismiss() 
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.gray.opacity(0.8))
+                                    .background(Circle().fill(.white.opacity(0.6)))
+                            }
+                            .padding()
+                        }
                         
                     } else {
                         Text("モデルの準備に失敗しました。")
