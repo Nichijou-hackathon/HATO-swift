@@ -15,12 +15,8 @@ struct EmotionRequest: Encodable {
 struct EmotionResponse: Decodable {
     let emotion: String
     let color: String
-    
-//    enum CodingKeys: String, CodingKey {
-//        case emotion
-//        case colorCode = "color_code"
-//    }
 }
+
 
 class EmotionAPIClient {
     
