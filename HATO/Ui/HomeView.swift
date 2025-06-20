@@ -13,17 +13,17 @@ struct HomeView: View {
         TabView(selection: $selectedTab) {
             ContentView()
                 .tabItem {
-                    Label("見つける", systemImage: "music.note.list")
+                    Label("Songs", systemImage: "music.note.list")
                 }
                 .tag(0)
             PhysicsHomeView()
                 .tabItem {
-                    Label("ホーム", systemImage: "house.fill")
+                    Label("Home", systemImage: "house.fill")
                 }
                 .tag(1)
             SavedEmotionListsView()
                 .tabItem {
-                    Label("履歴", systemImage: "clock.arrow.circlepath")
+                    Label("HeArt", systemImage: "clock.arrow.circlepath")
                 }
                 .tag(2)
         }
