@@ -5,8 +5,6 @@
 //  Created by 濵田翔真 on 2025/06/20.
 //
 
-// EmotionView.swift
-
 import SwiftUI
 import SceneKit
 
@@ -59,7 +57,7 @@ struct EmotionalArtView: View {
                                 
                                 Spacer()
                             
-                                Button(action: saveEmotion) { // ← ここで saveEmotion() を呼び出す
+                                Button(action: saveEmotion) {
                                     Image(systemName: isSaved ? "checkmark.circle.fill" : "square.and.arrow.down")
                                         .imageScale(.large).padding()
                                         .background(.thinMaterial).clipShape(Circle())
@@ -128,7 +126,6 @@ struct EmotionalArtView: View {
     private func saveEmotion() {
         let modelFileName = converter.modelFileName(for: emotionResponse.emotion)
         
-        // 保存する新しいオブジェクトを作成
         let newEmotion = SavedEmotion(
             emotion: emotionResponse.emotion,
             colorCode: emotionResponse.color,
@@ -138,10 +135,8 @@ struct EmotionalArtView: View {
             timestamp: .now
         )
         
-        // SwiftDataに挿入
         modelContext.insert(newEmotion)
         
-        // 保存済み状態に更新
         isSaved = true
     }
 }

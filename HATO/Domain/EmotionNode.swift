@@ -35,10 +35,10 @@ class EmotionNode: SCNNode {
             node.geometry?.materials.forEach { $0.diffuse.contents = color }
         }
     
-        let physicsShape = SCNPhysicsShape(node: wrapperNode, options: [.type: SCNPhysicsShape.ShapeType.convexHull])
+        let physicsShape = SCNPhysicsShape(node: wrapperNode, options: [.type: SCNPhysicsShape.ShapeType.boundingBox])
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: physicsShape)
         physicsBody.mass = 1.0
-        physicsBody.restitution = 0.5
+        physicsBody.restitution = 1.0
         physicsBody.friction = 0.8
         self.physicsBody = physicsBody
     }
