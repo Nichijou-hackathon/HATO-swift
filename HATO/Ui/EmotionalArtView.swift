@@ -12,20 +12,29 @@ import SceneKit
 
 struct EmotionalArtView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
     let emotionResponse: EmotionResponse
+    let sourceTitle: String
+    let sourceArtist: String
     
     @State private var scene: SCNScene?
     @State private var isLoading = true
     @State private var showModel = false
+    @State private var isSaved = false
+    
     
     private let converter = EmotionModelConverter()
     
     var body: some View {
-        ZStack {
-            LinearGradient(colors: [.gray.opacity(0.4), .gray.opacity(0.1)], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+        ZStack(alignment: .top){
+            LinearGradient(
+                colors: [Color(UIColor(hex: emotionResponse.color)).opacity(0.3), .white],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
             
             VStack(spacing: 30) {
                 if showModel {
@@ -41,15 +50,23 @@ struct EmotionalArtView: View {
                                     .allowsCameraControl
                                 ]
                             )
-                            Button(action: {
-                                dismiss() 
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.largeTitle)
-                                    .foregroundColor(.gray.opacity(0.8))
-                                    .background(Circle().fill(.white.opacity(0.6)))
+                            HStack {
+                                Button(action: { dismiss() }) {
+                                    Image(systemName: "xmark")
+                                        .imageScale(.large).padding()
+                                        .background(.thinMaterial).clipShape(Circle())
+                                }
+                                
+                                Spacer()
+                            
+                                Button(action: saveEmotion) { // ← ここで saveEmotion() を呼び出す
+                                    Image(systemName: isSaved ? "checkmark.circle.fill" : "square.and.arrow.down")
+                                        .imageScale(.large).padding()
+                                        .background(.thinMaterial).clipShape(Circle())
+                                }
+                                .disabled(isSaved)
+                                .animation(.spring(), value: isSaved)
                             }
-                            .padding()
                         }
                         
                     } else {
@@ -62,14 +79,25 @@ struct EmotionalArtView: View {
                         if isLoading { ProgressView().padding() }
                         else {
                             Button(action: { withAnimation { self.showModel = true } }) {
-                                Text("表示する").font(.headline).padding().frame(maxWidth: .infinity).background(Color.blue).foregroundColor(.white).cornerRadius(12)
+                                Text("表示する")
+                                    .font(.headline)
+                                    .padding()
+                                    .frame(maxWidth:.infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
                             }.padding(.horizontal, 40)
                         }
                     }
                     Spacer()
+                    Spacer()
                 }
             }
+            
+            .padding()
+            .foregroundColor(.primary)
         }
+        
         .task {
             await configureScene()
         }
@@ -96,6 +124,25 @@ struct EmotionalArtView: View {
         
         self.scene = loadedScene
         self.isLoading = false
+    }
+    private func saveEmotion() {
+        let modelFileName = converter.modelFileName(for: emotionResponse.emotion)
+        
+        // 保存する新しいオブジェクトを作成
+        let newEmotion = SavedEmotion(
+            emotion: emotionResponse.emotion,
+            colorCode: emotionResponse.color,
+            modelFileName: modelFileName,
+            sourceTitle: sourceTitle,
+            sourceArtist: sourceArtist,
+            timestamp: .now
+        )
+        
+        // SwiftDataに挿入
+        modelContext.insert(newEmotion)
+        
+        // 保存済み状態に更新
+        isSaved = true
     }
 }
 
