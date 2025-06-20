@@ -4,12 +4,6 @@
 //
 //  Created by 濵田翔真 on 2025/06/21.
 //
-//
-//  PhysicsHomeView.swift
-//  HATO
-//
-//  Created by 濵田翔真 on 2025/06/21.
-//
 
 import SwiftUI
 import SwiftData
@@ -27,20 +21,37 @@ struct PhysicsHomeView: View {
     @State private var scene: SCNScene?
     
     var body: some View {
-        NavigationStack {
-            if let scene = scene {
-                
-                SceneView(scene: scene)
-                    .ignoresSafeArea(edges: .top)
-            } else {
-                ProgressView("シーンを準備中...")
+        ZStack {
+            NavigationStack {
+                if let scene = scene {
+                    
+                    SceneView(scene: scene)
+                        .ignoresSafeArea(edges: .top)
+                } else {
+                    ProgressView("シーンを準備中...")
+                }
             }
-        }
-        .task {
-            initialSceneSetup()
-        }
-        .onChange(of: emotions) {
-            updateEmotionNodes()
+            VStack(spacing: 0) {
+                Text("HATO")
+                    .font(Font.custom("BerlinSansFBDemi-Bold", size: 62))
+                    .foregroundColor(Color(red: 100/255.0, green: 149/255.0, blue: 237/255.0))
+                            
+                
+                Text("HeArt Tune Ornament")
+                    .font(.custom("CourierNewPS-BoldItalicMT", size: 14))
+                    .foregroundColor(Color(red: 65/255.0, green: 105/255.0, blue: 225/255.0))
+                
+                
+                Spacer()
+            }
+            .padding(.top, 16)
+            .foregroundColor(.black.opacity(0.7))
+            .task {
+                initialSceneSetup()
+            }
+            .onChange(of: emotions) {
+                updateEmotionNodes()
+            }
         }
     }
     
@@ -87,7 +98,7 @@ struct PhysicsHomeView: View {
         let floor = SCNFloor()
         let floorNode = SCNNode(geometry: floor)
         floorNode.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        floorNode.isHidden = false 
+        floorNode.isHidden = false
         scene.rootNode.addChildNode(floorNode)
         
         
@@ -97,7 +108,7 @@ struct PhysicsHomeView: View {
         leftWall.position = SCNVector3(-20, 0, 0)
         leftWall.eulerAngles = SCNVector3(0, CGFloat.pi / 2, 0)
         leftWall.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        leftWall.isHidden = true 
+        leftWall.isHidden = true
         scene.rootNode.addChildNode(leftWall)
         
         let rightWall = SCNNode(geometry: wallGeometry)
