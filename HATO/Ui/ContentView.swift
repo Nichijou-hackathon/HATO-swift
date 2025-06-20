@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var recentSongs: [Song] = []
     @State private var requestState: RequestState = .loading
     @State private var latestSongEmotion: EmotionResponse?
+    @State private var showEmotionView = false
     
     private let apiClient = EmotionAPIClient()
     
@@ -63,6 +64,11 @@ struct ContentView: View {
                 await fetchRecentlyPlayedMusic()
             }
         }
+        .sheet(isPresented: $showEmotionView) {
+            if let emotion = latestSongEmotion {
+                EmotionalArtView(emotionResponse: emotion)
+            }
+        }
     }
     
     
@@ -102,6 +108,7 @@ struct ContentView: View {
                     print("\(latestSong.artistName)")
                     await MainActor.run {
                         self.latestSongEmotion = emotionResponse
+                        self.showEmotionView = true
                     }
                 } catch {
                     print("感情分析APIのエラー: \(error)")
@@ -159,7 +166,7 @@ struct MusicItemRow: View {
 struct LatestSongEmotionView: View {
     let song: Song
     let emotionData: EmotionResponse
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("最新の曲の感情分析")
